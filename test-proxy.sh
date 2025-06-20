@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# NodeProxy Test Script
+# BunProxy Test Script
 # This script tests if the proxy is working correctly
 
 # Colors for output
@@ -48,7 +48,7 @@ PROXY_HOST=$(echo $PROXY_URL | sed -e 's|https\?://||' -e 's|:.*||')
 PROXY_PORT=$(echo $PROXY_URL | sed -e 's|.*:||')
 
 echo
-print_info "Testing NodeProxy at $PROXY_URL"
+print_info "Testing BunProxy at $PROXY_URL"
 echo "=========================================="
 
 # Test 1: Basic connectivity
@@ -58,7 +58,7 @@ if curl -k -s --proxy https://$USERNAME:$PASSWORD@$PROXY_HOST:$PROXY_PORT https:
 else
     print_error "Cannot connect to proxy"
     echo "Please check:"
-    echo "  - Proxy is running: systemctl status nodeproxy"
+    echo "  - Proxy is running: systemctl status bunproxy"
     echo "  - Firewall allows port $PROXY_PORT"
     echo "  - Credentials are correct"
     exit 1

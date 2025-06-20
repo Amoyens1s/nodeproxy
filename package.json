@@ -1,11 +1,11 @@
 {
-  "name": "nodeproxy",
+  "name": "bunproxy",
   "version": "1.0.0",
-  "description": "High-performance HTTP/2 forward proxy server with authentication and SSL support",
+  "description": "High-performance HTTP/2 forward proxy server with authentication and SSL support, built with Bun",
   "main": "nodeproxy.js",
   "type": "module",
   "bin": {
-    "nodeproxy": "./nodeproxy.js"
+    "bunproxy": "./nodeproxy.js"
   },
   "scripts": {
     "start": "bun nodeproxy.js",
@@ -24,7 +24,7 @@
     "ssl",
     "bun"
   ],
-  "author": "NodeProxy Contributors",
+  "author": "BunProxy Contributors",
   "license": "MIT",
   "engines": {
     "bun": ">=1.0.0"

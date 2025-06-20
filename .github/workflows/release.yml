@@ -19,12 +19,24 @@ jobs:
 
       - name: Build and package release
         run: |
+          # Debug information
+          echo "Current directory: $(pwd)"
+          echo "Files in directory: $(ls -la)"
+
+          # Ensure scripts are executable
           chmod +x ./release.sh
-          ./release.sh
+
+          # Run the release script with debugging
+          ./release.sh || { echo "Release script failed"; cat ./release.sh; exit 1; }
+
+          # Verify output files exist
+          echo "Files after build:"
+          ls -la
 
       - name: Create GitHub Release
         id: create_release
         uses: softprops/action-gh-release@v1
+        if: success()
         with:
           files: |
             bunproxy-*.tar.gz

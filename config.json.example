@@ -7,8 +7,8 @@
     "password": "changeme"
   },
   "ssl": {
-    "cert": "/etc/nodeproxy/ssl/cert.pem",
-    "key": "/etc/nodeproxy/ssl/key.pem"
+    "cert": "/etc/bunproxy/ssl/fullchain.pem",
+    "key": "/etc/bunproxy/ssl/privkey.pem"
   },
   "domain": "proxy.example.com",
   "email": "admin@example.com",
