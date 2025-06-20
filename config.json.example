@@ -1,0 +1,20 @@
+{
+  "port": 8443,
+  "host": "0.0.0.0",
+  "auth": {
+    "enabled": true,
+    "username": "admin",
+    "password": "changeme"
+  },
+  "ssl": {
+    "cert": "/etc/nodeproxy/ssl/cert.pem",
+    "key": "/etc/nodeproxy/ssl/key.pem"
+  },
+  "domain": "proxy.example.com",
+  "email": "admin@example.com",
+  "logging": {
+    "level": "info",
+    "timestamp": true
+  },
+  "timeout": 30000
+} 

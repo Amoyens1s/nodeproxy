@@ -1,0 +1,40 @@
+{
+  "name": "nodeproxy",
+  "version": "1.0.0",
+  "description": "High-performance HTTP/2 forward proxy server with authentication and SSL support",
+  "main": "nodeproxy.js",
+  "type": "module",
+  "bin": {
+    "nodeproxy": "./nodeproxy.js"
+  },
+  "scripts": {
+    "start": "bun nodeproxy.js",
+    "test": "./test-proxy.sh",
+    "build": "bun build ./nodeproxy.js --target=bun --compile --outfile=dist/nodeproxy",
+    "build-all": "npm run build && chmod +x dist/nodeproxy",
+    "install-service": "sudo ./install.sh",
+    "uninstall-service": "sudo ./uninstall.sh"
+  },
+  "keywords": [
+    "proxy",
+    "http2",
+    "https",
+    "forward-proxy",
+    "authentication",
+    "ssl",
+    "bun"
+  ],
+  "author": "NodeProxy Contributors",
+  "license": "MIT",
+  "engines": {
+    "bun": ">=1.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Amoyens1s/nodeproxy.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Amoyens1s/nodeproxy/issues"
+  },
+  "homepage": "https://github.com/Amoyens1s/nodeproxy#readme"
+}

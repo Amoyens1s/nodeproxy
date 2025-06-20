@@ -1,93 +1,136 @@
-# nodeproxy
+# BunProxy - 基于 Bun 的高性能 HTTP/2 代理服务器
 
+BunProxy 是一个高性能、独立的 HTTP/2 正向代理服务器，使用[Bun](https://bun.sh/)运行时构建，相比 Node.js 版本提供更高的性能和更低的内存占用。该代理服务器打包为单一二进制文件，无需安装任何依赖即可在 Linux 上运行。它支持 HTTPS 连接、基本认证和通过 Let's Encrypt 的自动证书管理。
 
+## 性能优势
 
-## Getting started
+Bun 相比 Node.js 有显著的性能优势：
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+- **更快的启动速度**：通常比 Node.js 快 3-4 倍
+- **更高的 HTTP 处理性能**：处理请求时延迟更低，吞吐量更高
+- **更低的内存占用**：运行时消耗的内存更少
+- **原生二进制编译**：提供更好的性能和安全性
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+## 功能特性
 
-## Add your files
+- **独立二进制**：无需安装 Node.js 或任何其它依赖
+- **HTTP/2 支持**：完整的 HTTP/2 支持以提高性能
+- **Systemd 集成**：通过`systemctl`轻松管理服务
+- **自动 SSL 配置**：一键设置 Let's Encrypt 证书
+- **灵活配置**：简单的 JSON 配置文件
+- **安全性**：以非特权用户身份运行，权限限制
+- **一键安装**：简单的安装脚本，无需手动配置
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+## 安装方法
 
+安装非常简单。只需下载适合您系统的最新版本并运行安装脚本。
+
+1. **下载最新版本** 从[发布页面](https://github.com/Amoyens1s/nodeproxy/releases)下载。
+   选择适合您系统的压缩包（例如 `bunproxy-v1.0.0-linux.tar.gz`）。
+
+2. **解压文件**:
+
+   ```bash
+   tar -xzf bunproxy-v1.0.0-linux.tar.gz
+   cd bunproxy-v1.0.0-linux
+   ```
+
+3. **运行安装脚本**:
+   ```bash
+   sudo ./install.sh
+   ```
+
+安装脚本会引导您完成设置过程，包括域名配置和自动 SSL 证书生成。
+
+## 从源代码构建（开发者）
+
+如果您想从源代码构建代理，需要安装 Bun：
+
+1. **克隆仓库**:
+
+   ```bash
+   git clone https://github.com/Amoyens1s/nodeproxy.git
+   cd nodeproxy
+   ```
+
+2. **安装 Bun**:
+
+   ```bash
+   curl -fsSL https://bun.sh/install | bash
+   ```
+
+3. **构建二进制文件**:
+   ```bash
+   bun run build
+   ```
+   这将在`dist/`目录中创建一个二进制文件。
+
+## 配置文件
+
+配置文件位于`/etc/bunproxy/config.json`。安装脚本会为您创建此文件。
+
+```json
+{
+  "port": 8443,
+  "host": "0.0.0.0",
+  "auth": {
+    "enabled": true,
+    "username": "admin",
+    "password": "changeme"
+  },
+  "ssl": {
+    "cert": "/etc/bunproxy/ssl/fullchain.pem",
+    "key": "/etc/bunproxy/ssl/privkey.pem"
+  },
+  "domain": "proxy.example.com",
+  "email": "admin@example.com",
+  "logging": {
+    "level": "info",
+    "timestamp": true
+  },
+  "timeout": 30000
+}
 ```
-cd existing_repo
-git remote add origin https://gitlab.mfuns.com.cn/opensource/nodeproxy.git
-git branch -M main
-git push -uf origin main
+
+## 服务管理
+
+代理作为`systemd`服务运行。
+
+```bash
+# 检查服务状态
+sudo systemctl status bunproxy
+
+# 启动/停止/重启服务
+sudo systemctl start bunproxy
+sudo systemctl stop bunproxy
+sudo systemctl restart bunproxy
+
+# 查看日志
+sudo journalctl -u bunproxy -f
+
+# 证书更新后重新加载服务
+sudo systemctl reload bunproxy
 ```
 
-## Integrate with your tools
+## 卸载
 
-- [ ] [Set up project integrations](https://gitlab.mfuns.com.cn/opensource/nodeproxy/-/settings/integrations)
+要完全移除 BunProxy，请运行您首次解压文件的目录中的`uninstall.sh`脚本。
 
-## Collaborate with your team
+```bash
+sudo ./uninstall.sh
+```
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+这将移除二进制文件、配置文件和系统用户。
 
-## Test and Deploy
+## 贡献
 
-Use the built-in continuous integration in GitLab.
+欢迎贡献！请随时提交 Pull Request。
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+## 许可证
 
-***
+MIT 许可证 - 详见`LICENSE`文件。
 
-# Editing this README
+## 支持
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
-
-## Suggestions for a good README
-
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
-
-## Name
-Choose a self-explaining name for your project.
-
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
-
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
-
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
-
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
-
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
-
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
-
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
-
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+有关问题、问题或贡献，请访问：
+https://github.com/Amoyens1s/nodeproxy
